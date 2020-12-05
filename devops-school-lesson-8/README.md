@@ -1,7 +1,7 @@
 # devops-school-lesson-8
 
 ## Exercise
-Написать playbook, который подготавливает сборочное и продовое окружение на 2-х нодах. На сборочной ноде производится сборка проекта, на продовой - запуск
+Write a playbook that prepares the build and production environment on 2 nodes. On the build node, the project is builded, on the production node - the launch
 
 ## Requirements
 * on host: python, ansible

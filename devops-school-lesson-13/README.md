@@ -1,7 +1,7 @@
 # devops-school-lesson-13
 
 ## Exercise
-Написать Ansible playbook, который разворачивает 2 ноды в AWS EC2: сборочную и продовую. На сборочной ноде происходит сборка Java проекта, полученный артефакт передается на продовую ноду и на ней запускается
+Write an Ansible playbook that deploys 2 nodes in AWS EC2: assembly and production. On the build node, the Java project is builded, the resulting artifact is transferred to the production node and runs on it
 
 ## Requirements
 * on host: ansible, boto

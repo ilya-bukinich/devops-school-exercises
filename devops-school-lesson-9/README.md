@@ -1,7 +1,7 @@
 # devops-school-lesson-9
 
 ## Exercise
-Написать Ansible роли, которые подготавливают сборочное и продовое окружение на 2-х нодах. На сборочной ноде производится сборка проекта, на продовой - запуск.
+Write Ansible roles that prepare a build and production environment on 2 nodes. The assembly site assembles the project, the production site launches.
 
 ## Requirements
 * on host: python, ansible

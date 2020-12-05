@@ -1,7 +1,7 @@
 # devops-school-lesson-11
 
 ## Exercise
-С помощью Jenkins pipeline собрать и задеплоить Java приложение. Сборка должна происходить в сборочном контейнере. Артефактом сборки должен быть Docker образ с приложением
+Build and deploy a Java application using the Jenkins pipeline. The build must take place in the build container. The build artifact must be a Docker image with an application
 
 ## Requirements
 * on host: jenkins, docker

@@ -1,7 +1,7 @@
 # devops-school-lesson-7
 
 ## Exercise
-С помощью контейнерного оркестратора docker-compose поднять 2 сервиса: сборочный и продовый. В сборочном сервисе должна происходить сборка Java приложения. В продовом сервисе - запуск приложения. Продовый образ должен быть минимальным по размеру
+Using the docker-compose container orchestrator, launch 2 services: build and production. Build-service must build the Java application. In prod-service - launching the application. The product image should be as small as possible
 
 ## How to start
 `git clone https://github.com/ilya-bukinich/devops-school-exercises.git && cd devops-school-exercises/devops-school-lesson-7/`  

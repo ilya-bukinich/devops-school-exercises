@@ -1,7 +1,7 @@
 # devops-school-lesson-14
 
 ## Exercise
-С помощью Terraform поднять 2 инстанса в облаке. «Сборочный» инстанс собирает Java приложение. «Продовый» инстанс запускает приложение. В качестве репозитория использовать нативный сервис облачного провайдера
+Launch 2 instances in the cloud using Terraform. A "build" instance builds a Java application. The “prod” instance launches the application. Use the native cloud provider service as a repository
 
 ## Requirements
 * on host: terraform
