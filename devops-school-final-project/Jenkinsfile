@@ -1,0 +1,35 @@
+// Jenkins pipeline
+
+pipeline {
+
+  agent any
+
+  stages {
+
+    stage('Pull source code') {
+      steps {
+        git 'https://github.com/ilya-bukinich/devops-school-final-project.git'
+      }
+    }
+
+    stage('Terraform plan') {
+      steps {
+        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'aws_id', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+        sh 'terraform init'
+        sh 'terraform plan -out plan.tfplan'
+        sh 'terraform apply plan.tfplan'
+        sh 'terraform output build_ip >> build && terraform output prod_ip >> prod'
+        }
+      }
+    }
+
+    stage('Ansible playbook') {
+      steps {
+        withCredentials([usernamePassword(credentialsId: 'docker_id', passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
+        ansiblePlaybook becomeUser: 'ubuntu', credentialsId: 'aws_key', disableHostKeyChecking: true, inventory: 'build', playbook: 'build-playbook.yml'
+        ansiblePlaybook becomeUser: 'ubuntu', credentialsId: 'aws_key', disableHostKeyChecking: true, inventory: 'prod', playbook: 'prod-playbook.yml'
+        }
+      }
+    }
+  }
+}

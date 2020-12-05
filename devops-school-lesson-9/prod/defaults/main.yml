@@ -1,0 +1,3 @@
+---
+# defaults file for prod
+tomcat_webapps_folder: /var/lib/tomcat8/webapps

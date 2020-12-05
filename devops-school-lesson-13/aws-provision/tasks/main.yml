@@ -1,0 +1,70 @@
+---
+# tasks file for aws-provision
+- name: create key pair
+  ec2_key:
+    name: '{{ key_name }}'
+    region: '{{ aws_region }}'
+    force: 'yes'
+  register: ec2_key_result
+- name: save private key
+  copy: content='{{ ec2_key_result.key.private_key }}' dest='~/.ssh/id_rsa' mode=0600
+- name: provision a build instance
+  ec2:
+     key_name: '{{ key_name }}'
+     region: '{{ aws_region }}'
+     instance_type: '{{ instance_type }}'
+     image: '{{ ami_id }}'
+     assign_public_ip: 'yes'
+     vpc_subnet_id: '{{ vpc_subnet_id }}'
+     group_id: '{{ sg_id }}'
+     exact_count: 1
+     wait: true
+     user_data: |
+               #!/bin/sh
+               apt update && apt install python -y
+     count_tag:
+        Name: build
+     instance_tags:
+        Name: build
+  register: ec2
+- name: add build instance public IPs to host group
+  add_host:
+    hostname: '{{ item.public_ip }}'
+    groupname: build
+  loop: '{{ ec2.instances }}'
+  delegate_to: localhost
+- name: provision a prod instance
+  ec2:
+     key_name: '{{ key_name }}'
+     region: '{{ aws_region }}'
+     instance_type: '{{ instance_type }}'
+     image: '{{ ami_id }}'
+     assign_public_ip: 'yes'
+     vpc_subnet_id: '{{ vpc_subnet_id }}'
+     group_id: '{{ sg_id }}'
+     exact_count: 1
+     wait: true
+     user_data: |
+               #!/bin/sh
+               apt update && apt install python -y
+     count_tag:
+        Name: prod
+     instance_tags:
+        Name: prod
+  register: ec2
+- name: add prod instance public IPs to host group
+  add_host:
+    hostname: '{{ item.public_ip }}'
+    groupname: prod
+  loop: '{{ ec2.instances }}'
+  delegate_to: localhost
+- name: make s3 bucket
+  s3_bucket:
+    name: '{{ s3_bucket_name }}'
+    state: present
+    public_access_block:
+      block_public_acls: True
+      ignore_public_acls: True
+      block_public_policy: True
+      restrict_public_buckets: True
+  register: s3_bucket

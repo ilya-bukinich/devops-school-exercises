@@ -1,0 +1,57 @@
+---
+- name: prepare the build environment and build java app
+  hosts: test
+  tasks:
+    - name: check if git, java, maven are installed
+      become: 'yes'
+      apt:
+        name: "{{ packages }}"
+        state: present
+      vars:
+        packages:
+          - git
+          - default-jdk
+          - maven
+    - name: copy source code
+      become: 'yes'
+      synchronize:
+        src: ./java
+        dest: /usr/src/app
+        compress: 'yes'
+    - name: build app
+      become: 'yes'
+      command: mvn package
+      args:
+        chdir: /usr/src/app/java
+    - name: pull artifact
+      become: 'yes'
+      synchronize:
+        mode: 'pull'
+        src: /usr/src/app/java/target/app.war
+        dest: ./tmp/
+        compress: 'yes'
+
+- name: prepare the prod environment and deploy java app
+  hosts: prod
+  tasks:
+    - name: check if git, java, tomcat8 are installed
+      become: 'yes'
+      apt:
+        name: "{{ packages }}"
+        state: present
+      vars:
+        packages:
+          - git
+          - default-jdk
+          - tomcat8
+    - name: copy app war
+      become: 'yes'
+      synchronize:
+        src: ./tmp/app.war
+        dest: /var/lib/tomcat8/webapps
+        compress: 'yes'
+    - name: restart tomcat8
+      become: 'yes'
+      service:
+        name: tomcat8
+        state: restarted

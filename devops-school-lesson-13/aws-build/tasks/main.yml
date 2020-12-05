@@ -1,0 +1,22 @@
+---
+# tasks file for aws-build
+- name: ensure that maven installed
+  become: 'yes'
+  apt:
+    name: maven
+    state: present
+- name: mkdir build directory
+  file:
+    path: /home/ubuntu/app/java
+    state: directory
+- name: push source code
+  become: 'yes'
+  synchronize:
+    src: ./java
+    dest: /home/ubuntu/app
+    dirs: yes
+    compress: 'yes'
+  register: source
+  notify:
+    - build artifact
+    - push artifact

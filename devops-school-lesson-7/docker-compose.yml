@@ -1,0 +1,26 @@
+version: '3.2'
+
+services:
+
+  test:
+    build: ./test
+    volumes:
+      - app:/usr/src/app/target
+
+  prod:
+    build: ./prod
+    depends_on:
+      - test
+    command: bash -c "/opt/tomcat/bin/catalina.sh run"
+    volumes:
+      - app:/opt/tomcat/webapps
+    ports:
+      - 8080:8080
+
+
+networks:
+  default:
+    driver: bridge
+
+volumes:
+  app:

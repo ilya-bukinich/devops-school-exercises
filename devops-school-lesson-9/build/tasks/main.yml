@@ -1,0 +1,22 @@
+---
+# tasks file for build
+- name: install maven
+  become: 'yes'
+  apt:
+    name: maven
+    state: present
+- name: mkdir build directory
+  file:
+    path: '{{ build_folder }}'
+    state: directory
+- name: push source code
+  become: 'yes'
+  synchronize:
+    src: '{{ source_folder }}'
+    dest: '{{ dest_folder }}'
+    dirs: 'yes'
+    compress: 'yes'
+  register: source
+  notify:
+    - build artifact
+    - push artifact

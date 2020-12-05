@@ -1,0 +1,14 @@
+---
+tasks file for aws-deploy
+- name: ensure that tomcat8 installed
+  become: 'yes'
+  apt:
+    name: tomcat8
+    state: present
+- name: pull artifact
+  aws_s3:
+    bucket: c0d49674-96d4-4656-8715-3bb9a41a3cb4
+    object: app.war
+    dest: var/lib/tomcat8/webapps/app.war
+    mode: get
+  notify: restart tomcat

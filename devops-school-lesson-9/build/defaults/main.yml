@@ -1,0 +1,6 @@
+---
+# defaults file for build
+source_folder: ./java
+dest_folder: /usr/src/app
+build_folder: /usr/src/app/java
+target_folder: /usr/src/app/java/target

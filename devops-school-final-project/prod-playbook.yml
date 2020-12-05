@@ -1,0 +1,17 @@
+---
+# Ansible playbook
+- name: deploy stage
+  hosts: prod
+  become: 'yes'
+  become_user: ubuntu
+  tasks:
+    - name: check if software are installed
+      apt:
+        name: "{{ packages }}"
+        state: present
+      vars:
+        packages:
+          - python
+          - docker.io
+    - name: docker run docker_image
+      command: docker run -d - p 8080:8080 ilyabukinich/simple-java-app:latest

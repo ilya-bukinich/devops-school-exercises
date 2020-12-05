@@ -1,0 +1,31 @@
+---
+# Ansible playbook
+- name: build stage
+  hosts: build
+  become: 'yes'
+  become_user: ubuntu
+  tasks:
+    - name: check if software are installed
+      apt:
+        name: "{{ packages }}"
+        state: present
+      vars:
+        packages:
+          - python
+          - docker.io
+    - name: copy source code
+      synchronize:
+        src: ./
+        dest: /usr/src/app
+        compress: 'yes'
+    - name: login on dockerhub
+      command: echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+    - name: build and push docker image
+      docker_image:
+        source: build
+        build:
+          path: /usr/src/app/Dockerfile
+        name: ilyabukinich/simple-java-app
+        tag: latest
+        target: prod
+        push: yes

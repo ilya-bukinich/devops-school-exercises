@@ -1,0 +1,6 @@
+---
+# defaults file for aws-deploy
+include_vars:
+  dir: ./aws-deploy
+  extensions:
+    - yml

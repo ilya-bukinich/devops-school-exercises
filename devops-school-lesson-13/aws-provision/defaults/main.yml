@@ -1,0 +1,11 @@
+---
+# defaults file for aws-provision
+ami_id: #must be filled
+aws_access_key: #must be filled
+aws_access_secret: #must be filled
+aws_region: #must be filled
+vpc_subnet_id: #must be filled
+sg_id: #must be filled
+key_name: aws_key
+instance_type: t2.micro
+s3_bucket_name: #must be filled

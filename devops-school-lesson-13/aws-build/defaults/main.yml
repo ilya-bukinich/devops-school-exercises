@@ -1,0 +1,6 @@
+---
+# defaults file for aws-build
+include_vars:
+  dir: ./aws-deploy
+  extensions:
+    - yml

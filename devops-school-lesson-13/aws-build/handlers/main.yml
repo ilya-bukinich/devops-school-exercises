@@ -1,0 +1,15 @@
+---
+# handlers file for aws-build
+- name: build artifact
+  become: 'yes'
+  command: mvn package -Dmaven.test.skip=true -ntp
+  args:
+    chdir: /home/ubuntu/app/java
+  when: source.changed
+- name: push artifact to s3
+  aws_s3:
+    bucket: c0d49674-96d4-4656-8715-3bb9a41a3cb4
+    object: app.war
+    src: /home/ubuntu/app/java/target/app.war
+    mode: put
+    metadata: 'Content-Encoding=gzip,Cache-Control=no-cache'

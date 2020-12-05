@@ -1,0 +1,7 @@
+---
+# handlers file for aws-deploy
+- name: restart tomcat
+  become: 'yes'
+  service:
+    name: tomcat8
+    state: restarted

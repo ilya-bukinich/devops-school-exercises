@@ -1,0 +1,35 @@
+pipeline {
+
+  agent {
+      docker {
+        image 'docker:dind'
+        args '--privileged -v /var/run/docker.sock:/var/run/docker.sock -v /tmp/:/.docker/'
+          }
+        }
+
+    stages {
+        stage('pull source code') {
+            steps {
+                    git 'https://github.com/ilya-bukinich/devops-school-lesson-11.git'
+            }
+        }
+
+        stage('build & push image') {
+            steps {
+            withCredentials([usernamePassword(credentialsId: '31542df2-a8a0-4cf9-8d5e-c66488beb1e1', passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
+                sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
+                sh 'docker build --target prod -t ilyabukinich/simple-java-app:latest .'
+                sh 'docker push ilyabukinich/simple-java-app:latest'
+                sh 'docker logout'
+              }
+          }
+      }
+
+        stage('deploy prod') {
+          agent any
+            steps {
+                sh 'ssh 35.228.148.114 docker run -d -p 8080:8080 ilyabukinich/simple-java-app:latest'
+            }
+        }
+    }
+}

@@ -1,0 +1,19 @@
+- name: aws-provision
+  hosts: localhost
+  become: 'yes'
+  roles:
+    - aws-provision
+
+- name: aws-build
+  hosts: build
+  become: 'yes'
+  remote_user: ubuntu
+  roles:
+    - aws-build
+
+- name: aws-deploy
+  hosts: prod
+  become: 'yes'
+  remote_user: ubuntu
+  roles:
+    - aws-deploy

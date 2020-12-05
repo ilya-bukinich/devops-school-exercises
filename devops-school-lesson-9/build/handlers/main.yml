@@ -1,0 +1,15 @@
+---
+# handlers file for build
+- name: build artifact
+  become: 'yes'
+  command: mvn package
+  args:
+    chdir: '{{ build_folder }}'
+  when: source.changed
+- name: push artifact
+  become: 'yes'
+  synchronize:
+    mode: 'pull'
+    src: '{{ target_folder }}/app.war'
+    dest: '{{ artifact_folder }}/app.war'
+    compress: 'yes'
